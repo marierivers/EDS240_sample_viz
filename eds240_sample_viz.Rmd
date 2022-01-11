@@ -2,9 +2,10 @@
 title: "EDS240 Sample Visualization"
 author: "Marie Rivers"
 date: "1/10/2022"
-output: 
+output:
   html_document:
     theme: flatly
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -23,7 +24,7 @@ library(maps)
 ```
 
 ```{r, message=FALSE}
-data <- read_csv(here("data", "snowfall_fig-1.csv"), skip = 6)
+data <- read_csv(here("data", "snowfall_data.csv"), skip = 6)
 ```
 
 ```{r}
