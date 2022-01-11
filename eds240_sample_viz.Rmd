@@ -69,4 +69,4 @@ snow_trend_mapview
 ```{r, include = FALSE, message=FALSE}
 ggsave(here("figs", "mrivers_snow_tend_map.png"), plot = snow_trend_map)
 ```
-
+This figure shows the change in total snowfall at select locations in the continental US for the time frame of 1930-2007. Values are reported as percent rate of change per year. While total snowfall change has been insignificant in many areas, more locations have experienced a decrease in total snowfall than an increase. The trend of decreased snowfall is particularly noticeable in the Pacific Northwest. Changes to snowfall patterns is an indicator of climate change and can have implications on communities that rely on winter snow for drinking water supplies.
