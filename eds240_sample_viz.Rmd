@@ -1,0 +1,72 @@
+---
+title: "EDS240 Sample Visualization"
+author: "Marie Rivers"
+date: "1/10/2022"
+output: 
+  html_document:
+    theme: flatly
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+library(tidyverse)
+library(here)
+library(mapview)
+library(sf)
+library(urbnmapr)
+library(tidycensus)
+library(ggplot2)
+library(maps)
+```
+
+```{r, message=FALSE}
+data <- read_csv(here("data", "snowfall_fig-1.csv"), skip = 6)
+```
+
+```{r}
+snow_tend_pts <- data %>% 
+  sf::st_as_sf(
+    coords = c("Longitude", "Latitude"),
+    crs = st_crs(4326))
+```
+
+```{r, include=FALSE}
+snow_trend_map <- plot(snow_tend_pts)
+```
+
+```{r}
+usa = st_as_sf(map('state', plot = FALSE, fill = TRUE))
+laea = st_crs("+proj=laea +lat_0=30 +lon_0=-95") # Lambert equal area
+usa <- st_transform(usa, laea)
+```
+
+```{r}
+snow_trend_map <- ggplot() +
+  geom_sf(data = usa, fill = "darkseagreen1") + 
+  geom_sf(data = snow_tend_pts, aes(color = Trend)) +
+  scale_color_gradient2(
+    low = "red",
+    mid = "white",
+    high = "navyblue",
+    midpoint = 0,
+    breaks = c(-2.5, -2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5)) +
+  labs(title = "Total Snowfall Change, 1930-2007",
+       subtitle = "US EPA Climate Change Indicators",
+       caption = "Data source: Kunkel, K.E., M. Palecki, L. Ensor, K.G. Hubbard, D. Robinson, K. Redmond, and D. Easterling. 2009. \nTrends in twentieth-century U.S. snowfall using a quality-controlled dataset. J. Atmos. Ocean. Tech. 26:33–44",
+       color = "rate of change \n(% per year)") +
+  theme(plot.caption = element_text(size = 8, hjust = 0), plot.caption.position = "plot")
+snow_trend_map
+```
+
+```{r, include=FALSE}
+snow_trend_mapview <- mapview::mapview(snow_tend_pts, map.types = "Esri.WorldPhysical")
+snow_trend_mapview
+```
+
+```{r, include = FALSE, message=FALSE}
+ggsave(here("figs", "mrivers_snow_tend_map.png"), plot = snow_trend_map)
+```
+
